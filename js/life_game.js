@@ -27,9 +27,6 @@ function random_init(mask, num) {
 	return mask;
 }
 
-function user_init(mask, index) {
-}
-
 function generate_map(parent, cols, rows) {
 	var map = new Array(cols);
 	for (var i = 0; i < cols; i ++) {
@@ -64,7 +61,6 @@ function update_map(map, mask, cols, rows){
 		for (var j = 0; j < rows; j++) {
 				if (mask[i][j]) map[i][j].style.backgroundColor = "white";
 				else map[i][j].style.backgroundColor = "black";
-			
 		}
 	}
 }
@@ -129,8 +125,8 @@ function update(map, mask, cols, rows) {
 (function(){
 	var canvas = document.getElementById('draw-animation');
 
-	var cols = 100;
-	var rows = 100;
+	var cols = 50;
+	var rows = 50;
 	var num = cols * rows;
 	var map = generate_map(canvas, cols, rows);
 	var mask = generate_mask(cols, rows);

@@ -21,19 +21,22 @@
 			<p>generation:<span id="generation">0</span> &nbsp&nbsp&nbsp population:<span id="population">0</span></p>
 		</div>
 		<div id="draw-animation"></div>
-	<script src="./js/life_game.js"></script>
+	
 	</div>
-	<div id="mocha">
-	<script src="./node_modules/mocha/mocha.js"></script>
-	<script>mocha.setup('bdd');</script>
-	<script src="./node_modules/chai/chai.js"></script>
-	<script>
-		var assert = chai.assert;
-	</script>
-	<script src="./js/test.js"></script>
-	<script>
-		mocha.run();
-	</script>
+	<div id="test"></div>
+	<div id="mocha" style="position:relative; left:500px;">
+
+		<script src="./node_modules/mocha/mocha.js"></script>
+		<script>mocha.setup('bdd');</script>
+		<script src="./node_modules/chai/chai.js"></script>
+		<script>
+			var assert = chai.assert;
+		</script>
+		<script src="./js/life_game.js"></script>
+		<script src="./js/test.js"></script>
+		<script>
+			mocha.run();
+		</script>
 	</div>
 </body>
 </html>

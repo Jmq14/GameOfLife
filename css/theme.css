@@ -1,6 +1,9 @@
 .content-warp {
 	text-align: center;
-	width: 100%
+	position: absolute;
+	width: 100%;
+	padding: 10px;
+	z-index: 1000000;
 }
 
 #draw-animation {
