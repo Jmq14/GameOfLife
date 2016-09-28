@@ -1,0 +1,9 @@
+.content-warp {
+	text-align: center;
+	width: 100%
+}
+
+#draw-animation {
+	position: relative;
+	margin: auto;
+}
