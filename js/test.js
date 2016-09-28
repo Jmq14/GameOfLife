@@ -66,11 +66,13 @@ describe('random_init', function() {
     assert.isFunction(random_init);
   });
   it('has two arguments', function() {
-    assert.equal(random_init.length, 2);
+    assert.equal(random_init.length, 1);
   });
   it('returns mask with [num] living cells', function() {
     var mask = [[0,0,0], [0,0,0]];
-    mask = random_init(mask, 2);
+    var num = 2;
+    document.getElementById("input").value=num.toString();
+    mask = random_init(mask);
     var count = 0;
     for (var i = 0; i < mask.length; i ++){
       for (var j = 0; j < mask[i].length; j++) {
@@ -181,9 +183,6 @@ describe('Interaction (buttons, inputs & outputs)', function() {
   it('should be a function', function() {
     assert.isFunction(update);
   });
-  it('has two arguments', function() {
-    assert.equal(random_init.length, 2);
-  });
   it('starts game after clicking the [start] button', function() {
     var running = document.getElementById("start").onclick();
     assert.equal(running, true);
@@ -198,9 +197,6 @@ describe('Interaction (buttons, inputs & outputs)', function() {
     var mask = document.getElementById("reset").onclick();
     var count = get_population(mask);
     assert.strictEqual(count, num);
-  });
-  it('shows the right population number', function() {
-    var p = parseInt(document.getElementById("population").innerHTML);
   });
 });
 

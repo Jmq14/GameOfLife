@@ -1,8 +1,11 @@
+//=============Initializatiom=================//
+
 function randomSort(a, b) {
     return Math.random() > 0.5 ? -1 : 1;
 }
 
-function random_init(mask, num) {
+function random_init(mask) {
+	var num = parseInt(document.getElementById("input").value);  
 	var cols = mask.length
 	if (cols<=0) return mask;
 	var rows = mask[0].length;
@@ -55,6 +58,8 @@ function generate_mask(cols, rows) {
 	}
 	return mask;
 }
+
+//===============Update===================//
 
 function get_population(mask) {
 	var num = 0;
@@ -120,6 +125,10 @@ function update_mask(mask) {
 	return mask;
 }
 
+function update_generation(generation) {
+	document.getElementById("generation").innerHTML = generation.toString();
+}
+
 function update(map, mask) {
 	var cols = map.length;
 	if (cols <= 0) return -1;
@@ -129,7 +138,6 @@ function update(map, mask) {
 	update_map(map, mask);
 	return mask;
 }
-
 
 (function(){
 	var canvas = document.getElementById('draw-animation');
@@ -151,22 +159,23 @@ function update(map, mask) {
 	var generation = 0;
 	var population = 0;
 
+
+	//=============Interaction=================//
+
 	document.getElementById("start").onclick = function (){
 		if (running == false) {
 			running = true;
 			if (init == false) {
-				var num = parseInt(document.getElementById("input").value);  
-				mask = random_init(mask, num);
-				update_map(map, mask);
-				
 				init = true;
+				mask = random_init(mask);
+				update_map(map, mask);
 			}
 			var id = setInterval(function() {
 				if (running == false) clearInterval(id);
 				else {
 					mask = update(map, mask);
 					generation ++;
-					document.getElementById("generation").innerHTML = generation.toString();
+					update_generation(generation);
 				}
 			}, 200);
 		}
@@ -184,11 +193,9 @@ function update(map, mask) {
 	document.getElementById("reset").onclick = function() {
 		running = false;
 		init = true;
-		var num = parseInt(document.getElementById("input").value);  
-		mask = random_init(mask, num);
+		mask = random_init(mask);
 		update_map(map, mask);
-		generation = 0;
-		document.getElementById("generation").innerHTML = generation.toString();
+		update_generation(0);
 		return mask;
 	}
 })(); 
