@@ -20,8 +20,8 @@ function random_init(mask, num) {
 
 	random_sort.sort(randomSort);
 	for (var i = 0; i < cols*rows && i < num; i ++ ) {
-		var x = Math.floor(random_sort[i] / cols);
-		var y = random_sort[i] % cols;
+		var x = Math.floor(random_sort[i] / rows);
+		var y = random_sort[i] % rows;
 		mask[x][y] = 1;
 	}
 	return mask;
@@ -56,15 +56,6 @@ function generate_mask(cols, rows) {
 	return mask;
 }
 
-function update_map(map, mask, cols, rows){
-	for (var i = 0; i < cols; i++) {
-		for (var j = 0; j < rows; j++) {
-				if (mask[i][j]) map[i][j].style.backgroundColor = "white";
-				else map[i][j].style.backgroundColor = "black";
-		}
-	}
-}
-
 function get_population(mask) {
 	var num = 0;
 	var cols = mask.length
@@ -79,7 +70,21 @@ function get_population(mask) {
 	return num;
 }
 
-function update_mask(mask, cols, rows) {
+function update_map(map, mask){
+	var cols = map.length;
+	var rows = map[0].length;
+	for (var i = 0; i < cols; i++) {
+		for (var j = 0; j < rows; j++) {
+				if (mask[i][j]) map[i][j].style.backgroundColor = "white";
+				else map[i][j].style.backgroundColor = "black";
+		}
+	}
+	document.getElementById("population").innerHTML = get_population(mask).toString();
+}
+
+function update_mask(mask) {
+	var cols = mask.length;
+	var rows = mask[0].length;
 	var update_mask = generate_mask(cols, rows);
 	for (var i = 0; i < cols; i++) {
 		for (var j = 0; j < rows; j++) {
@@ -115,9 +120,13 @@ function update_mask(mask, cols, rows) {
 	return mask;
 }
 
-function update(map, mask, cols, rows) {
-	mask = update_mask(mask, cols, rows);
-	update_map(map, mask, cols, rows);
+function update(map, mask) {
+	var cols = map.length;
+	if (cols <= 0) return -1;
+	var rows = map[0].length;
+	if (cols != mask.length || rows != mask[0].length || rows <= 0) return -1;
+	mask = update_mask(mask);
+	update_map(map, mask);
 	return mask;
 }
 
@@ -125,8 +134,8 @@ function update(map, mask, cols, rows) {
 (function(){
 	var canvas = document.getElementById('draw-animation');
 
-	var cols = 50;
-	var rows = 50;
+	var cols = 60;
+	var rows = 60;
 	var num = cols * rows;
 	var map = generate_map(canvas, cols, rows);
 	var mask = generate_mask(cols, rows);
@@ -148,20 +157,20 @@ function update(map, mask, cols, rows) {
 			if (init == false) {
 				var num = parseInt(document.getElementById("input").value);  
 				mask = random_init(mask, num);
-				update_map(map, mask, cols, rows);
-				document.getElementById("population").innerHTML = get_population(mask).toString();
+				update_map(map, mask);
+				
 				init = true;
 			}
-			
-
 			var id = setInterval(function() {
-				if (running == false) clearInterval(id)
-				mask = update(map, mask, cols, rows);
-				generation ++;
-				document.getElementById("population").innerHTML = get_population(mask).toString();
-				document.getElementById("generation").innerHTML = generation.toString();
+				if (running == false) clearInterval(id);
+				else {
+					mask = update(map, mask);
+					generation ++;
+					document.getElementById("generation").innerHTML = generation.toString();
+				}
 			}, 200);
 		}
+		return running;
 	}
 
 	document.getElementById("pause").onclick = function () {
@@ -169,16 +178,17 @@ function update(map, mask, cols, rows) {
 			init = true;
 			running = false;
 		}
+		return running;
 	}
 
 	document.getElementById("reset").onclick = function() {
 		running = false;
+		init = true;
 		var num = parseInt(document.getElementById("input").value);  
 		mask = random_init(mask, num);
-		update_map(map, mask, cols, rows);
-		init = true;
+		update_map(map, mask);
 		generation = 0;
-		document.getElementById("population").innerHTML = get_population(mask).toString();
 		document.getElementById("generation").innerHTML = generation.toString();
+		return mask;
 	}
 })(); 
