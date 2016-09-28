@@ -1,18 +1,36 @@
-function random_init(map) {
-
+function randomSort(a, b) {
+    return Math.random() > 0.5 ? -1 : 1;
 }
 
-function user_init(mask) {
-	for (var i = 5; i < 10; i++) {
-		for (var j = 5; j < 10; j++) {
-			mask[i][j] = 1;
+function random_init(mask, num) {
+
+	var cols = mask.length
+	if (cols<=0) return mask;
+	var rows = mask[0].length;
+	if (rows <= 0) return mask;
+	for (var i = 0; i < cols; i ++) {
+		for (var j = 0; j < rows; j++) {
+			mask[i][j] = 0;
 		}
 	}
-	mask[4][6] = 1;
-	mask[99][10] = 1;
-	mask[99][11] = 1;
-	mask[99][12] = 1;
+	
+	var random_sort = new Array(cols*rows);
+	for (var i = 0; i < cols*rows; i ++ ) {
+		random_sort[i] = i;
+	}
+
+	random_sort.sort(randomSort);
+	for (var i = 0; i < cols*rows && i < num; i ++ ) {
+		var x = Math.floor(random_sort[i] / cols);
+		var y = random_sort[i] % cols;
+		mask[x][y] = 1;
+	}
 	return mask;
+	
+}
+
+function user_init(mask, index) {
+	
 }
 
 function generate_map(parent, cols, rows) {
@@ -33,7 +51,7 @@ function generate_map(parent, cols, rows) {
 	return map;
 }
 
-function generate_mask(mask, cols, rows) {
+function generate_mask(cols, rows) {
 	var mask = new Array(cols);
 	for (var i = 0; i < cols; i ++) {
 		mask[i] = new Array(rows);
@@ -41,6 +59,7 @@ function generate_mask(mask, cols, rows) {
 			mask[i][j] = 0;
 		}
 	}
+	
 	return mask;
 }
 
@@ -99,7 +118,6 @@ function update(map, mask, cols, rows) {
 
 (function(){
 	var canvas = document.getElementById('draw-animation');
-	//var two = new Two({ width: 800, height: 800 }).appendTo(elem);
 
 	var cols = 100;
 	var rows = 100;
@@ -107,15 +125,43 @@ function update(map, mask, cols, rows) {
 	var map = generate_map(canvas, cols, rows);
 	var mask = generate_mask(cols, rows);
 
-
-	// map / mask: 
+	// NOTE:
+	// map(html dome) / mask(2D Matrix): 
 	// white / 1 => live
 	// black / 0 => dead
 
-	mask = user_init(mask);
-	update_map(map, mask, cols, rows);
+	var running = false;
+	var init = false;
 
-	var id = setInterval(function() {
-		mask = update(map, mask, cols, rows);
-	}, 500);
+	document.getElementById("start").onclick = function (){
+		if (running == false) {
+			running = true;
+			if (init == false) {
+				var num = parseInt(document.getElementById("input").value);  
+				mask = random_init(mask, num);
+				init = true;
+			}
+			update_map(map, mask, cols, rows);
+
+			var id = setInterval(function() {
+				if (running == false) clearInterval(id)
+				mask = update(map, mask, cols, rows);
+			}, 200);
+		}
+	}
+
+	document.getElementById("pause").onclick = function () {
+		if (running == true) {
+			init = true;
+			running = false;
+		}
+	}
+
+	document.getElementById("reset").onclick = function() {
+		running = false;
+		var num = parseInt(document.getElementById("input").value);  
+		mask = random_init(mask, num);
+		update_map(map, mask, cols, rows);
+		init = true;
+	}
 })(); 

@@ -5,5 +5,9 @@
 
 #draw-animation {
 	position: relative;
-	margin: auto;
+	margin-top: 20px; 
+}
+
+input {
+	width: 50px;
 }
