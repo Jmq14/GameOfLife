@@ -2,11 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Test</title>    
     <link rel="stylesheet" href="./node_modules/mocha/mocha.css">
-
+    <link rel="stylesheet" type="text/css" href="./css/theme.css">
 </head>
 <body>
+	<div class="content-wrap">
+		<div id="title"><h2>Conway's Game of Life</h2></div>
+		<div id="author"><h3>Implemented by Mengqing Jiang</h3></div>
+		<div class="operation">
+			number of initial living cells: <input type="text" name="fname" id="input" value="1000">
+			<button type="button" id="start">start</button>
+			<button type="button" id="pause">pause</button>
+			<button type="button" id="reset">reset</button>
+		</div>
+		<div class="info">
+			<p>generation:<span id="generation">0</span> &nbsp&nbsp&nbsp population:<span id="population">0</span></p>
+		</div>
+		<div id="draw-animation"></div>
+	<script src="./js/life_game.js"></script>
+	</div>
 	<div id="mocha">
 	<script src="./node_modules/mocha/mocha.js"></script>
 	<script>mocha.setup('bdd');</script>
@@ -14,8 +30,7 @@
 	<script>
 		var assert = chai.assert;
 	</script>
-	<script src="two.js"></script>
-	<script src="life_game.js"></script>
+	<script src="./js/test.js"></script>
 	<script>
 		mocha.run();
 	</script>
