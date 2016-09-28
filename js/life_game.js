@@ -3,7 +3,6 @@ function randomSort(a, b) {
 }
 
 function random_init(mask, num) {
-
 	var cols = mask.length
 	if (cols<=0) return mask;
 	var rows = mask[0].length;
@@ -26,11 +25,9 @@ function random_init(mask, num) {
 		mask[x][y] = 1;
 	}
 	return mask;
-	
 }
 
 function user_init(mask, index) {
-	
 }
 
 function generate_map(parent, cols, rows) {
@@ -59,7 +56,6 @@ function generate_mask(cols, rows) {
 			mask[i][j] = 0;
 		}
 	}
-	
 	return mask;
 }
 
@@ -71,6 +67,20 @@ function update_map(map, mask, cols, rows){
 			
 		}
 	}
+}
+
+function get_population(mask) {
+	var num = 0;
+	var cols = mask.length
+	if (cols<=0) return 0;
+	var rows = mask[0].length;
+	if (rows <= 0) return 0;
+	for (var i = 0; i < cols; i ++) {
+		for (var j = 0; j < rows; j++) {
+			if (mask[i][j] == 1) num ++;
+		}
+	}
+	return num;
 }
 
 function update_mask(mask, cols, rows) {
@@ -130,8 +140,11 @@ function update(map, mask, cols, rows) {
 	// white / 1 => live
 	// black / 0 => dead
 
+	// Global variables
 	var running = false;
 	var init = false;
+	var generation = 0;
+	var population = 0;
 
 	document.getElementById("start").onclick = function (){
 		if (running == false) {
@@ -139,13 +152,18 @@ function update(map, mask, cols, rows) {
 			if (init == false) {
 				var num = parseInt(document.getElementById("input").value);  
 				mask = random_init(mask, num);
+				update_map(map, mask, cols, rows);
+				document.getElementById("population").innerHTML = get_population(mask).toString();
 				init = true;
 			}
-			update_map(map, mask, cols, rows);
+			
 
 			var id = setInterval(function() {
 				if (running == false) clearInterval(id)
 				mask = update(map, mask, cols, rows);
+				generation ++;
+				document.getElementById("population").innerHTML = get_population(mask).toString();
+				document.getElementById("generation").innerHTML = generation.toString();
 			}, 200);
 		}
 	}
@@ -163,5 +181,8 @@ function update(map, mask, cols, rows) {
 		mask = random_init(mask, num);
 		update_map(map, mask, cols, rows);
 		init = true;
+		generation = 0;
+		document.getElementById("population").innerHTML = get_population(mask).toString();
+		document.getElementById("generation").innerHTML = generation.toString();
 	}
 })(); 
